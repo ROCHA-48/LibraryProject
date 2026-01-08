@@ -1,0 +1,9 @@
+# IDE
+.idea/
+*.iml
+
+# Build
+target/
+
+# Système
+.DS_Store

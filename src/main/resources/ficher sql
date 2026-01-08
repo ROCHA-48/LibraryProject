@@ -1,0 +1,29 @@
+CREATE DATABASE bibliotheque;
+
+-- Table livres
+CREATE TABLE livres (
+    id SERIAL PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    auteur VARCHAR(255) NOT NULL,
+    categorie VARCHAR(100),
+    nombre_exemplaires INT DEFAULT 1
+);
+
+-- Table membres
+CREATE TABLE membres (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE,
+    date_adhesion DATE NOT NULL
+);
+
+-- Table emprunts
+CREATE TABLE emprunts (
+    id SERIAL PRIMARY KEY,
+    membre_id INT NOT NULL REFERENCES membres(id),
+    livre_id INT NOT NULL REFERENCES livres(id),
+    date_emprunt DATE NOT NULL,
+    date_retour_prevue DATE NOT NULL,
+    date_retour_effective DATE
+);

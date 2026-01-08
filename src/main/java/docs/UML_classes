@@ -1,0 +1,78 @@
+
+interface Affichable {
+  +afficherDetails()
+}
+
+abstract class Entite {
+  -id: int
+  +getId(): int
+  +setId(int): void
+}
+
+class Livre {
+  -titre: String
+  -auteur: String
+  -categorie: String
+  -nombreExemplaires: int
+  +estDisponible(): boolean
+  +emprunter(): void
+  +retourner(): void
+  +afficherDetails(): void
+}
+
+class Membre {
+  -nom: String
+  -prenom: String
+  -email: String
+  -adhesionDate: LocalDate
+  +afficherDetails(): void
+}
+
+class Emprunt {
+  -idEmprunt: int
+  -membreId: int
+  -livreId: int
+  -dateEmprunt: LocalDate
+  -dateRetourPrevue: LocalDate
+  -dateRetourEffective: LocalDate
+  +estEnRetard(): boolean
+  +getJoursRetard(): long
+  +calculerPenalite(): double
+}
+
+class LivreDAO {
+  +ajouterLivre(Livre): void
+  +rechercherParTitre(String): List<Livre>
+  +...
+}
+
+class MembreDAO {
+  +inscrire(Membre): void
+  +...
+}
+
+class EmpruntDAO {
+  +enregistrerEmprunt(Emprunt): void
+  +...
+}
+
+class BibliothequeApp {
+  +main(String[]): void
+}
+
+Entite <|-- Livre
+Entite <|-- Membre
+Affichable <|.. Livre
+Affichable <|.. Membre
+
+LivreDAO --> Livre
+MembreDAO --> Membre
+EmpruntDAO --> Emprunt
+
+Emprunt --> "1" Membre : référence
+Emprunt --> "1" Livre : référence
+
+BibliothequeApp --> LivreDAO
+BibliothequeApp --> MembreDAO
+BibliothequeApp --> EmpruntDAO
+@enduml
