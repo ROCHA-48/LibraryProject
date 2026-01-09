@@ -1,6 +1,6 @@
 # Gestion de Bibliothèque
 
-Projet Java réalisé par Wilson Serefe.
+Projet Java réalisé par Wilson ROCHA.
 
 ## Fonctionnalités
 - Inscription de membres
