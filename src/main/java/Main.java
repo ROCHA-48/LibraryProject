@@ -31,7 +31,7 @@ public class Main {
     }
 
     private static void afficherMenu() {
-        System.out.println("\n===  MENU PRINCIPAL ===");
+        System.out.println("===  MENU PRINCIPAL ===");
         System.out.println("1 - Ajouter un livre");
         System.out.println("2 - Rechercher un livre");
         System.out.println("3 - Inscrire un membre");
@@ -78,20 +78,20 @@ public class Main {
     }
 
     private static void rechercherLivre() {
-        System.out.println("\n🔍 Recherche de livre");
+        System.out.println("Recherche de livre");
         System.out.print("Entrez un mot-clé (titre) : ");
         String motCle = scanner.next();
         List<Livre> resultats = livreDAO.rechercherParTitre(motCle);
         if (resultats.isEmpty()) {
             System.out.println("Aucun livre trouvé.");
         } else {
-            System.out.println(+ resultats.size() + " résultat(s) :");
+            System.out.println(resultats.size() + " résultat(s) :");
             resultats.forEach(l -> System.out.println(" • " + l.getTitre() + " par " + l.getAuteur()));
         }
     }
 
     private static void inscrireMembre() {
-        System.out.println("\nInscription d'un membre");
+        System.out.println("Inscription d'un membre");
         System.out.print("Nom : ");
         String nom = scanner.next();
         System.out.print("Prénom : ");
@@ -105,7 +105,7 @@ public class Main {
     }
 
     private static void enregistrerEmprunt() {
-        System.out.println("\n Enregistrement d'un emprunt");
+        System.out.println("Enregistrement d'un emprunt");
         System.out.print("ID du membre : ");
         int membreId = lireEntier();
         System.out.print("ID du livre : ");
@@ -123,12 +123,12 @@ public class Main {
     }
 
     private static void afficherEmpruntsEnRetard() {
-        System.out.println("\nEmprunts en retard");
+        System.out.println("Emprunts en retard");
         List<Emprunt> retards = empruntDAO.getEmpruntsEnRetard();
         if (retards.isEmpty()) {
             System.out.println("Aucun emprunt en retard.");
         } else {
-            System.out.println(+ retards.size() + " emprunt(s) en retard :");
+            System.out.println(retards.size() + " emprunt(s) en retard :");
             for (Emprunt e : retards) {
                 long jours = e.getJoursRetard();
                 double penalite = e.calculerPenalite();
