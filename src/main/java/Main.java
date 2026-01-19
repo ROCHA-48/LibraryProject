@@ -4,13 +4,14 @@ import model.Emprunt;
 import dao.LivreDAO;
 import dao.MembreDAO;
 import dao.EmpruntDAO;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * Classe principale de l'application de gestion de bibliothèque.
- * Fournit un menu interactif en ligne de commande.
+ * Tout est prêt à l'emploi : création de tables, DAO, menu interactif.
  */
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -19,19 +20,21 @@ public class Main {
     private static final EmpruntDAO empruntDAO = new EmpruntDAO();
 
     public static void main(String[] args) {
-        System.out.println(" Bienvenue dans la Gestion de Bibliothèque !");
+        System.out.println("=== Bienvenue dans la Gestion de Bibliothèque ===");
+
         int choix;
         do {
             afficherMenu();
             choix = lireEntier();
             traiterChoix(choix);
         } while (choix != 6);
-        System.out.println(" Au revoir !");
+
+        System.out.println("Au revoir !");
         scanner.close();
     }
 
     private static void afficherMenu() {
-        System.out.println("===  MENU PRINCIPAL ===");
+        System.out.println("\n=== MENU PRINCIPAL ===");
         System.out.println("1 - Ajouter un livre");
         System.out.println("2 - Rechercher un livre");
         System.out.println("3 - Inscrire un membre");
@@ -43,10 +46,12 @@ public class Main {
 
     private static int lireEntier() {
         while (!scanner.hasNextInt()) {
-            System.out.print(" Veuillez entrer un nombre : ");
+            System.out.print("Veuillez entrer un nombre : ");
             scanner.next();
         }
-        return scanner.nextInt();
+        int val = scanner.nextInt();
+        scanner.nextLine(); // consommer le saut de ligne
+        return val;
     }
 
     private static void traiterChoix(int choix) {
@@ -56,32 +61,33 @@ public class Main {
             case 3 -> inscrireMembre();
             case 4 -> enregistrerEmprunt();
             case 5 -> afficherEmpruntsEnRetard();
-            case 6 -> System.out.println(" Fermeture...");
+            case 6 -> System.out.println("Fermeture...");
             default -> System.out.println("Choix invalide. Veuillez réessayer.");
         }
     }
 
     private static void ajouterLivre() {
-        System.out.println("Ajout d'un livre");
+        System.out.println("\n=== Ajout d'un livre ===");
         System.out.print("Titre : ");
-        String titre = scanner.next();
+        String titre = scanner.nextLine();
         System.out.print("Auteur : ");
-        String auteur = scanner.next();
+        String auteur = scanner.nextLine();
         System.out.print("Catégorie : ");
-        String categorie = scanner.next();
+        String categorie = scanner.nextLine();
         System.out.print("Nombre d'exemplaires : ");
         int nb = lireEntier();
 
-        Livre livre = new Livre(0, titre, auteur, categorie, nb); // id=0 → généré par DB
+        Livre livre = new Livre(0, titre, auteur, categorie, nb); // id = 0 → généré par la DB
         livreDAO.ajouterLivre(livre);
         System.out.println("Livre ajouté avec ID = " + livre.getId());
     }
 
     private static void rechercherLivre() {
-        System.out.println("Recherche de livre");
+        System.out.println("\n=== Recherche de livre ===");
         System.out.print("Entrez un mot-clé (titre) : ");
-        String motCle = scanner.next();
+        String motCle = scanner.nextLine();
         List<Livre> resultats = livreDAO.rechercherParTitre(motCle);
+
         if (resultats.isEmpty()) {
             System.out.println("Aucun livre trouvé.");
         } else {
@@ -91,13 +97,13 @@ public class Main {
     }
 
     private static void inscrireMembre() {
-        System.out.println("Inscription d'un membre");
+        System.out.println("\n=== Inscription d'un membre ===");
         System.out.print("Nom : ");
-        String nom = scanner.next();
+        String nom = scanner.nextLine();
         System.out.print("Prénom : ");
-        String prenom = scanner.next();
+        String prenom = scanner.nextLine();
         System.out.print("Email : ");
-        String email = scanner.next();
+        String email = scanner.nextLine();
 
         Membre membre = new Membre(0, nom, prenom, email, LocalDate.now());
         membreDAO.inscrireMembre(membre);
@@ -105,16 +111,15 @@ public class Main {
     }
 
     private static void enregistrerEmprunt() {
-        System.out.println("Enregistrement d'un emprunt");
+        System.out.println("\n=== Enregistrement d'un emprunt ===");
         System.out.print("ID du membre : ");
         int membreId = lireEntier();
         System.out.print("ID du livre : ");
         int livreId = lireEntier();
-        System.out.print("Date d'emprunt (ex: 2026-01-07) ou appuyez sur Entrée pour aujourd'hui : ");
-        scanner.nextLine(); // consommer \n
+        System.out.print("Date d'emprunt (ex: 2026-01-10) ou Entrée pour aujourd'hui : ");
         String dateStr = scanner.nextLine().trim();
         LocalDate dateEmprunt = dateStr.isEmpty() ? LocalDate.now() : LocalDate.parse(dateStr);
-        LocalDate dateRetour = dateEmprunt.plusDays(14); // prêt de 14 jours
+        LocalDate dateRetour = dateEmprunt.plusDays(14);
 
         Emprunt emprunt = new Emprunt(membreId, livreId, dateEmprunt, dateRetour);
         empruntDAO.enregistrerEmprunt(emprunt);
@@ -123,8 +128,9 @@ public class Main {
     }
 
     private static void afficherEmpruntsEnRetard() {
-        System.out.println("Emprunts en retard");
+        System.out.println("\n=== Emprunts en retard ===");
         List<Emprunt> retards = empruntDAO.getEmpruntsEnRetard();
+
         if (retards.isEmpty()) {
             System.out.println("Aucun emprunt en retard.");
         } else {
